@@ -25,6 +25,9 @@ def add_customer():
     numbox.get()
     #checks if the item number input is a number
     textnum = numbox.get().isnumeric()
+    #function for closing error message
+    def new_window_close():
+                new_window.destroy()
     #if the item number is a number and doesent contain any symbols or caracters or isint blank
     if textnum == True:
         intnum = int(numbox.get())
@@ -36,8 +39,6 @@ def add_customer():
         #prevents user from interacting with main window until error message is closed so they dont create more windows or interact with the main window
             new_window.grab_set()
         #closes new window
-            def new_window_close():
-                new_window.destroy()
             Button(new_window, text="Ok", command=new_window_close, width = 3).grid(row= 3)
 
     #if the item number input is not a number 
@@ -49,8 +50,6 @@ def add_customer():
             #prevents user from interacting with main window until error message is closed so they dont create more windows or interact with the main window
             new_window.grab_set()
             #closes new window
-            def new_window_close():
-                new_window.destroy()
             Button(new_window, text="Ok", command=new_window_close, width = 3).grid(row= 3)
 
     #stops name inputs if it is not in letters
@@ -123,14 +122,24 @@ def print_entry():
 
 #deletes a customer entry
 def delete():
-    #checks if row number selected is not higher then the customer list.
+    #to close new window
+    def new_window_close():
+        new_window.destroy()
+    #checks if delete number entered is a number
+    delenum = delete_item.get().isnumeric()
+    if delenum == False:
+        #error message if not a number
+        new_window = Toplevel(main_window)
+        new_window.grab_set()
+        Button(new_window, text="Ok", command=new_window_close, width = 3).grid(row= 3)
+        Label(new_window,text= "Please enter number for deletion",width = 30).grid(row=2)
+    elif delenum == True:
+        #checks if row number selected is not higher then the customer list.
         dele = int(delete_item.get())
         if dele > entered_count["entries"] or dele == 0:
             #error message for invalid row number to delete customer
             new_window = Toplevel(main_window)
             new_window.grab_set()
-            def new_window_close():
-                new_window.destroy()
             Button(new_window, text="Ok", command=new_window_close, width = 3).grid(row= 3)
             Label(new_window,text= "Please choose a valid row number for deletion",width = 40).grid(row=2)
         elif dele <= entered_count["entries"] and dele !=0:
@@ -175,7 +184,7 @@ def main():
 
     Label(main_window, text=" ", width = 5, font = font, bg=bg2).grid(row=7, column=0)
 
-    Button(main_window, text="Delete", command=delete, width = 6, font = font, bg = bg3, fg="red").grid(row=8, column=0,padx=12)
+    Button(main_window, text="Delete #", command=delete, width = 7, font = font, bg = bg3, fg="red").grid(row=8, column=0,padx=12)
 
 
 #font and colour theme
@@ -227,3 +236,4 @@ delete_item.grid(row=8, column=1, sticky = W)
 
 
 main()
+
